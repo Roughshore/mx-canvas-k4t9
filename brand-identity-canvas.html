@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Brand Identity Canvas — Full</title>
+<style>
+  :root{
+    --bg:#101418; --panel:#1a2027; --panel2:#222a33;
+    --ink:#e8e4dc; --ink-dim:#8b94a0; --accent:#d9a05b; --accent2:#6fa8b8;
+    --track:#39434f; --warn:#c96f4a; --good:#7fb069;
+    font-size:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Avenir Next','Segoe UI',system-ui,sans-serif;
+    line-height:1.5; padding:2.5rem 1rem 6rem;
+  }
+  .wrap{max-width:820px; margin:0 auto;}
+  header{margin-bottom:2rem;}
+  h1{font-size:1.6rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase;}
+  h1 span{color:var(--accent);}
+  .sub{color:var(--ink-dim); margin-top:.4rem; font-size:.95rem; max-width:62ch;}
+  .meta{display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1.4rem; align-items:center;}
+  input[type=text], textarea{
+    background:var(--panel); border:1px solid var(--track); color:var(--ink);
+    border-radius:8px; padding:.55rem .8rem; font-size:.95rem; font-family:inherit;
+  }
+  input[type=text]:focus, textarea:focus{outline:none; border-color:var(--accent);}
+  .btn{
+    background:var(--panel2); border:1px solid var(--track); color:var(--ink);
+    border-radius:8px; padding:.55rem 1rem; font-size:.88rem; cursor:pointer;
+    transition:border-color .15s;
+  }
+  .btn:hover{border-color:var(--accent);}
+  .btn.primary{background:var(--accent); color:#181410; border-color:var(--accent); font-weight:600;}
+  .status{font-size:.85rem; color:var(--ink-dim); margin-top:.8rem;}
+  .status b{color:var(--accent);}
+  .compare-tag{display:none; margin-top:.6rem; font-size:.85rem; color:var(--accent2);}
+
+  .tier{
+    margin-top:3rem; padding:.7rem 1.1rem; border-radius:10px;
+    background:linear-gradient(90deg, var(--panel2), transparent);
+    border-left:4px solid var(--accent);
+  }
+  .tier h2{font-size:1.05rem; letter-spacing:.16em; text-transform:uppercase;}
+  .tier p{color:var(--ink-dim); font-size:.85rem;}
+
+  h3.section{
+    font-size:.92rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
+    margin:2.2rem 0 .3rem; border-bottom:1px solid #2c3540; padding-bottom:.5rem;
+    display:flex; justify-content:space-between; align-items:baseline;
+  }
+  h3.section .prog{font-size:.78rem; color:var(--ink-dim); letter-spacing:0; text-transform:none; font-weight:400;}
+  h3.section .prog.done{color:var(--good);}
+  .section-hint{color:var(--ink-dim); font-size:.85rem; margin-bottom:1rem;}
+
+  .field{margin-bottom:1rem;}
+  .field label{display:block; font-weight:600; font-size:.92rem; margin-bottom:.25rem;}
+  .field .fh{color:var(--ink-dim); font-weight:400; font-size:.8rem; margin-left:.4rem;}
+  .field textarea{width:100%; min-height:2.6rem; resize:vertical;}
+
+  .card{
+    background:var(--panel); border:1px solid #262e38; border-radius:14px;
+    padding:1.2rem 1.4rem 1.3rem; margin-bottom:.9rem; position:relative;
+  }
+  .card.unset{border-left:3px solid var(--track);}
+  .card.set{border-left:3px solid var(--accent);}
+  .labels{display:flex; justify-content:space-between; font-weight:600; font-size:1rem;}
+  .labels .right{text-align:right;}
+  .hint{color:var(--ink-dim); font-size:.82rem; margin:.2rem 0 .9rem; text-align:center;}
+  .track-wrap{position:relative; padding:.6rem 0;}
+  input[type=range]{
+    -webkit-appearance:none; appearance:none; width:100%; height:6px;
+    background:linear-gradient(90deg, var(--accent2), var(--track) 30%, var(--track) 70%, var(--accent));
+    border-radius:3px; outline:none; cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:26px; height:26px; border-radius:50%;
+    background:var(--ink); border:3px solid var(--accent); cursor:grab; transition:transform .1s;
+  }
+  input[type=range]::-webkit-slider-thumb:active{cursor:grabbing; transform:scale(1.15);}
+  input[type=range]::-moz-range-thumb{
+    width:22px; height:22px; border-radius:50%;
+    background:var(--ink); border:3px solid var(--accent); cursor:grab;
+  }
+  .card.unset input[type=range]::-webkit-slider-thumb{border-color:var(--track); background:var(--ink-dim);}
+  .card.unset input[type=range]::-moz-range-thumb{border-color:var(--track); background:var(--ink-dim);}
+  .ghost{
+    position:absolute; top:50%; width:14px; height:14px; border-radius:50%;
+    background:var(--accent2); transform:translate(-50%,-50%); opacity:.9;
+    pointer-events:none; border:2px solid var(--bg); display:none;
+  }
+  .center-tick{
+    position:absolute; left:50%; top:50%; width:2px; height:16px;
+    background:var(--track); transform:translate(-50%,-50%); pointer-events:none;
+  }
+  .readout{display:flex; justify-content:space-between; font-size:.78rem; color:var(--ink-dim); margin-top:.5rem;}
+  .delta{color:var(--warn); font-weight:600; display:none;}
+
+  .arch-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.7rem;}
+  .arch{
+    background:var(--panel); border:1px solid #262e38; border-radius:12px;
+    padding:.9rem 1rem; cursor:pointer; transition:border-color .15s; position:relative;
+  }
+  .arch:hover{border-color:var(--ink-dim);}
+  .arch h4{font-size:.95rem; margin-bottom:.15rem;}
+  .arch p{font-size:.76rem; color:var(--ink-dim); line-height:1.35;}
+  .arch .badge{
+    display:none; position:absolute; top:-.55rem; right:.6rem;
+    font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    padding:.15rem .5rem; border-radius:99px;
+  }
+  .arch.primary{border-color:var(--accent);}
+  .arch.primary .badge{display:block; background:var(--accent); color:#181410;}
+  .arch.secondary{border-color:var(--accent2);}
+  .arch.secondary .badge{display:block; background:var(--accent2); color:#0e1418;}
+  .arch .cbadge{
+    display:none; position:absolute; bottom:.5rem; right:.6rem;
+    font-size:.66rem; color:var(--accent2); font-weight:600;
+  }
+  .arch-legend{font-size:.8rem; color:var(--ink-dim); margin:.6rem 0 0;}
+
+  .summary{
+    background:var(--panel2); border:1px solid #2c3540; border-radius:14px;
+    padding:1.4rem 1.6rem; margin-top:2.6rem;
+  }
+  .summary h2{font-size:1rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.8rem;}
+  .summary p{font-size:.95rem; margin-bottom:.5rem;}
+  .summary .note{color:var(--ink-dim); font-size:.85rem;}
+  footer{margin-top:2.5rem; color:var(--ink-dim); font-size:.8rem; text-align:center;}
+  @media print{ body{background:#fff; color:#111;} .btn{display:none;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Brand Identity <span>/</span> Canvas</h1>
+    <p class="sub">Full brand-definition worksheet in three tiers: what the brand <b>means</b> (Strategy), how it <b>looks and speaks</b> (Expression), and what guests <b>feel and remember</b> (Experience). The middle of a slider is not a safe answer — it means "no decision". Fill it in more than one sitting; the tiers are ordered so earlier answers inform later ones.</p>
+    <div class="meta">
+      <input type="text" id="brand" placeholder="Brand name" style="width:12rem">
+      <input type="text" id="who" placeholder="Your name" style="width:10rem">
+      <button class="btn primary" id="exportBtn">Export JSON</button>
+      <button class="btn" id="importBtn">Import &amp; compare…</button>
+      <button class="btn" id="copyBtn">Copy summary</button>
+      <button class="btn" id="resetBtn">Reset</button>
+      <input type="file" id="fileInput" accept=".json" style="display:none">
+    </div>
+    <div class="status" id="status"></div>
+    <div class="compare-tag" id="compareTag"></div>
+  </header>
+
+  <div id="content"></div>
+
+  <div class="summary">
+    <h2>Brand fingerprint</h2>
+    <div id="summaryText"><p class="note">Fill in the sections to build the profile.</p></div>
+  </div>
+
+  <footer>Brand identity canvas · fill separately, then import each other's file to compare</footer>
+</div>
+
+<script>
+/* ================= CONFIG ================= */
+const TIERS = [
+  {key:"A", title:"Tier A — Strategy", desc:"What the brand means. Decide this first; everything below is an expression of it."},
+  {key:"B", title:"Tier B — Expression", desc:"How the brand looks, speaks and writes. Direction, not specs — hex codes and fonts come later, judged against these."},
+  {key:"C", title:"Tier C — Experience", desc:"What guests sense and remember. For a hospitality brand this IS the product."}
+];
+
+const SECTIONS = [
+  {num:1, tier:"A", key:"essentials", type:"text", title:"Brand essentials",
+   hint:"One sentence each. If you can't write it in one sentence, it isn't decided yet.",
+   fields:[
+     {k:"purpose", label:"Purpose", hint:"why the brand exists beyond making money"},
+     {k:"promise", label:"Promise", hint:"the one thing every guest can count on"},
+     {k:"audience", label:"Core audience", hint:"who it's for — and implicitly, who it's not for"},
+     {k:"differentiator", label:"Differentiator", hint:"what you do that competitors can't or won't"},
+     {k:"values", label:"Values", hint:"3 words max — beliefs that shape decisions"}
+   ]},
+  {num:2, tier:"A", key:"personality", type:"sliders", title:"Personality",
+   hint:"Who the brand would be as a person. Push toward an extreme — bland brands live in the middle.",
+   pairs:[
+     {l:"Playful", r:"Serious", hint:"Wit and lightness, or gravity and composure?"},
+     {l:"Youthful", r:"Mature", hint:"Energy of a newcomer, or the calm of experience?"},
+     {l:"Friendly", r:"Authoritative", hint:"Peer at eye level, or expert you look up to?"},
+     {l:"Conventional", r:"Rebellious", hint:"Plays by category rules, or breaks them on purpose?"},
+     {l:"Accessible", r:"Exclusive", hint:"Open arms for everyone, or scarce and selective?"},
+     {l:"Understated", r:"Bold", hint:"Quiet confidence, or loud presence?"},
+     {l:"Classic", r:"Innovative", hint:"Timeless and proven, or new and experimental?"},
+     {l:"Functional", r:"Emotional", hint:"Sells outcomes and specs, or feelings and meaning?"},
+     {l:"Mass-market", r:"Niche", hint:"Built for the many, or precisely for the few?"},
+     {l:"Local", r:"Global", hint:"Rooted in a place and community, or placeless and universal?"},
+     {l:"Corporate", r:"Personal", hint:"An organization speaking, or people with names and faces?"},
+     {l:"Economical", r:"Luxurious", hint:"Smart value, or indulgence worth paying up for?"}
+   ]},
+  {num:3, tier:"A", key:"archetype", type:"archetype", title:"Archetype",
+   hint:"The story pattern the brand plays in the guest's life. Click a card to cycle: primary → secondary → none."},
+  {num:4, tier:"B", key:"voice", type:"sliders", title:"Voice & tone",
+   hint:"The four classic voice dimensions (Nielsen Norman Group). These govern every word the brand publishes.",
+   pairs:[
+     {l:"Funny", r:"Serious", hint:"Does the brand joke — ever?"},
+     {l:"Casual", r:"Formal", hint:"\"Hey, quick thing—\" or \"Dear guest,\"?"},
+     {l:"Irreverent", r:"Respectful", hint:"Pokes fun at conventions, or honors them?"},
+     {l:"Enthusiastic", r:"Matter-of-fact", hint:"Exclamation points and delight, or calm plain statements?"}
+   ]},
+  {num:5, tier:"B", key:"color", type:"sliders", title:"Color direction",
+   hint:"Direction for the palette — the actual swatches get chosen later, judged against these.",
+   pairs:[
+     {l:"Warm", r:"Cool", hint:"Overall temperature: amber, wood, fire — or blue, ice, dusk?"},
+     {l:"Muted", r:"Vivid", hint:"Saturation: desaturated and dusty, or full-strength color?"},
+     {l:"Light & airy", r:"Dark & moody", hint:"Value register: white space and daylight, or shadow and depth?"},
+     {l:"Monochrome + accent", r:"Polychrome", hint:"One dominant hue with a single accent, or a broad palette?"},
+     {l:"Natural / earthy", r:"Synthetic / digital", hint:"Colors that exist in the landscape, or engineered ones that don't?"}
+   ]},
+  {num:6, tier:"B", key:"form", type:"sliders", title:"Form & typography",
+   hint:"Shape language and type character — direction, not font picking.",
+   pairs:[
+     {l:"Organic / soft", r:"Geometric / sharp", hint:"Rounded, hand-drawn forms — or precise angles and grids?"},
+     {l:"Humanist / serif", r:"Modern / sans", hint:"Type with warmth and history, or clean contemporary neutrality?"},
+     {l:"Neutral type", r:"Expressive type", hint:"Typography stays invisible, or carries personality itself?"},
+     {l:"Airy / spacious", r:"Dense / rich", hint:"Generous whitespace, or layered, full layouts?"},
+     {l:"Flat / clean", r:"Textured / tactile", hint:"Smooth digital surfaces, or grain, paper, and material feel?"}
+   ]},
+  {num:7, tier:"B", key:"imagery", type:"sliders", title:"Imagery",
+   hint:"What kind of pictures tell the story.",
+   pairs:[
+     {l:"Photography", r:"Illustration", hint:"Real captured moments, or drawn interpretation?"},
+     {l:"Documentary / candid", r:"Staged / polished", hint:"Imperfect and true, or art-directed and flawless?"},
+     {l:"People-centric", r:"Place-centric", hint:"Faces and moments, or landscapes and spaces?"},
+     {l:"Calm / static", r:"Dynamic / motion-led", hint:"Still and contemplative, or video, movement, energy?"}
+   ]},
+  {num:8, tier:"B", key:"verbal", type:"text", title:"Verbal identity extras",
+   hint:"The words around the words.",
+   fields:[
+     {k:"tagline", label:"Tagline candidate", hint:"even a rough one — it forces clarity"},
+     {k:"naming", label:"Naming convention", hint:"how do products / spaces / cabins get named? (descriptive, place-based, invented…)"},
+     {k:"always", label:"Words we always use", hint:"3 words that belong to this brand"},
+     {k:"never", label:"Words we never use", hint:"3 words that are banned (e.g. \"luxury\", \"cozy\", \"unique\")"},
+     {k:"enemy", label:"The enemy", hint:"what the brand positions against — a competitor type, a behavior, an idea"}
+   ]},
+  {num:9, tier:"C", key:"sensory", type:"sliders", title:"Sensory & atmosphere",
+   hint:"What the space does to the senses. Memories encode through sound, scent and touch more durably than through visuals.",
+   pairs:[
+     {l:"Hushed / silent", r:"Sound-rich", hint:"Acoustic baseline: near-silence, or a living soundscape?"},
+     {l:"Natural soundscape", r:"Curated music", hint:"Wind, fire, snow underfoot — or a designed playlist?"},
+     {l:"Scent-neutral", r:"Signature scent", hint:"No deliberate smell, or a recognizable one (birch, tar, woodsmoke)?"},
+     {l:"Raw materials", r:"Finished surfaces", hint:"What hands touch: rough timber and wool, or smooth and sealed?"},
+     {l:"Dim & candlelit", r:"Bright & functional", hint:"Lighting register after dark."}
+   ]},
+  {num:10, tier:"C", key:"ritual", type:"sliders", title:"Memory & ritual",
+   hint:"How lasting memories are designed to happen.",
+   pairs:[
+     {l:"Effortless", r:"Earned", hint:"Best moments served on a plate, or reached through a small ordeal (the −20°C dash to the sauna)?"},
+     {l:"Scripted rituals", r:"Spontaneous moments", hint:"Designed peak moments, or space left for accidents?"},
+     {l:"Shareable / documented", r:"Present / unplugged", hint:"Built for the camera, or deliberately against it?"},
+     {l:"Visible host", r:"Invisible service", hint:"Hosts as part of the memory, or seamless and unseen?"},
+     {l:"Keepsake", r:"Leave-no-trace", hint:"Does the guest take a physical object home?"}
+   ]},
+  {num:11, tier:"C", key:"touchpoints", type:"sliders", title:"Physical touchpoints",
+   hint:"Packaging, in hospitality terms.",
+   pairs:[
+     {l:"Branded everywhere", r:"Quietly unbranded", hint:"Logo on the towels, or nowhere at all?"},
+     {l:"Standardized", r:"Unit-unique", hint:"Every space expresses the brand identically, or each has its own character?"}
+   ]}
+];
+
+const ARCHETYPES = [
+  {n:"Innocent", d:"Optimism, simplicity, honesty. \"Life can be easy.\" (Dove)"},
+  {n:"Everyman", d:"Belonging, common sense, relatability. \"You're one of us.\" (IKEA)"},
+  {n:"Hero", d:"Courage, mastery, proving worth. (Nike)"},
+  {n:"Outlaw", d:"Rebellion, disruption, breaking rules. (Harley-Davidson)"},
+  {n:"Explorer", d:"Freedom, discovery, the open trail. \"Don't fence me in.\" (Patagonia)"},
+  {n:"Creator", d:"Imagination, craft, self-expression. (LEGO)"},
+  {n:"Ruler", d:"Control, leadership, prestige. (Mercedes)"},
+  {n:"Magician", d:"Transformation, making dreams real. (Disney)"},
+  {n:"Lover", d:"Intimacy, passion, sensory pleasure. (Chanel)"},
+  {n:"Caregiver", d:"Protection, generosity, service. (Volvo)"},
+  {n:"Jester", d:"Fun, spontaneity, living in the moment. (Ben & Jerry's)"},
+  {n:"Sage", d:"Wisdom, truth, understanding. (The Economist)"}
+];
+
+/* ================= STATE ================= */
+const KEY = "brand-identity-canvas-full-v1";
+function blankState(){
+  const s = {brand:"", who:"", texts:{}, sliders:{}, archPrimary:null, archSecondary:null};
+  SECTIONS.forEach(sec=>{
+    if(sec.type==="sliders") s.sliders[sec.key] = sec.pairs.map(()=>null);
+    if(sec.type==="text") sec.fields.forEach(f=> s.texts[f.k]="");
+  });
+  return s;
+}
+let state = blankState();
+let compare = null;
+
+/* ================= BUILD DOM ================= */
+const content = document.getElementById("content");
+TIERS.forEach(tier=>{
+  const th = document.createElement("div");
+  th.className = "tier";
+  th.innerHTML = `<h2>${tier.title}</h2><p>${tier.desc}</p>`;
+  content.appendChild(th);
+
+  SECTIONS.filter(s=>s.tier===tier.key).forEach(sec=>{
+    const h = document.createElement("h3");
+    h.className = "section";
+    h.innerHTML = `<span>${sec.num} · ${sec.title}</span><span class="prog" data-prog="${sec.key}"></span>`;
+    content.appendChild(h);
+    const hint = document.createElement("p");
+    hint.className = "section-hint";
+    hint.textContent = sec.hint;
+    content.appendChild(hint);
+
+    if(sec.type==="text"){
+      sec.fields.forEach(f=>{
+        const div = document.createElement("div");
+        div.className = "field";
+        div.innerHTML = `<label>${f.label}<span class="fh">— ${f.hint}</span></label>
+          <textarea data-t="${f.k}" rows="1"></textarea>`;
+        content.appendChild(div);
+      });
+    }
+    if(sec.type==="sliders"){
+      sec.pairs.forEach((p,i)=>{
+        const id = sec.key+"_"+i;
+        const card = document.createElement("div");
+        card.className = "card unset";
+        card.innerHTML = `
+          <div class="labels"><span>${p.l}</span><span class="right">${p.r}</span></div>
+          <div class="hint">${p.hint}</div>
+          <div class="track-wrap">
+            <div class="center-tick"></div>
+            <input type="range" min="0" max="100" value="50" data-sec="${sec.key}" data-i="${i}">
+            <div class="ghost" data-gh="${id}"></div>
+          </div>
+          <div class="readout">
+            <span data-r="${id}">not set</span>
+            <span class="delta" data-d="${id}"></span>
+          </div>`;
+        content.appendChild(card);
+      });
+    }
+    if(sec.type==="archetype"){
+      const grid = document.createElement("div");
+      grid.className = "arch-grid"; grid.id = "archGrid";
+      ARCHETYPES.forEach((a,i)=>{
+        const div = document.createElement("div");
+        div.className = "arch"; div.dataset.a = i;
+        div.innerHTML = `<span class="badge"></span><h4>${a.n}</h4><p>${a.d}</p><span class="cbadge" data-cb="${i}"></span>`;
+        grid.appendChild(div);
+      });
+      content.appendChild(grid);
+      const legend = document.createElement("p");
+      legend.className = "arch-legend";
+      legend.innerHTML = `<span style="color:var(--accent)">■</span> primary &nbsp; <span style="color:var(--accent2)">■</span> secondary`;
+      content.appendChild(legend);
+    }
+  });
+});
+
+/* ================= HELPERS ================= */
+function sectionByKey(k){ return SECTIONS.find(s=>s.key===k); }
+function describe(secKey,i,v){
+  const p = sectionByKey(secKey).pairs[i];
+  const lean = v<50 ? p.l : p.r;
+  const s = Math.abs(v-50);
+  if(s<5)  return "centered — undecided";
+  if(s<20) return `leans ${lean}`;
+  if(s<35) return `clearly ${lean}`;
+  return `strongly ${lean}`;
+}
+
+/* ================= RENDER ================= */
+function render(){
+  let setCount=0, total=0;
+  SECTIONS.forEach(sec=>{
+    if(sec.type==="sliders"){
+      let secSet=0;
+      sec.pairs.forEach((p,i)=>{
+        total++;
+        const id = sec.key+"_"+i;
+        const v = state.sliders[sec.key][i];
+        const inp = document.querySelector(`input[data-sec="${sec.key}"][data-i="${i}"]`);
+        const card = inp.closest(".card");
+        const readout = document.querySelector(`[data-r="${id}"]`);
+        if(v===null){ card.className="card unset"; readout.textContent="not set"; }
+        else{ setCount++; secSet++; card.className="card set"; inp.value=v; readout.textContent=describe(sec.key,i,v); }
+        const ghost = document.querySelector(`[data-gh="${id}"]`);
+        const deltaEl = document.querySelector(`[data-d="${id}"]`);
+        const cv = compare && compare.sliders && compare.sliders[sec.key] ? compare.sliders[sec.key][i] : null;
+        if(cv!==null && cv!==undefined && compare){
+          ghost.style.display="block"; ghost.style.left=`calc(${cv}%)`;
+          const d = v===null?null:Math.abs(v-cv);
+          if(d!==null && d>=25){ deltaEl.style.display="inline"; deltaEl.textContent=`⚠ differs by ${d}`; }
+          else deltaEl.style.display="none";
+        } else { ghost.style.display="none"; deltaEl.style.display="none"; }
+      });
+      setProg(sec.key, secSet, sec.pairs.length);
+    }
+    if(sec.type==="text"){
+      const done = sec.fields.filter(f=>(state.texts[f.k]||"").trim()).length;
+      setProg(sec.key, done, sec.fields.length);
+    }
+    if(sec.type==="archetype"){
+      setProg(sec.key, state.archPrimary!==null?1:0, 1);
+    }
+  });
+
+  document.querySelectorAll(".arch").forEach(div=>{
+    const i = +div.dataset.a;
+    const badge = div.querySelector(".badge");
+    div.classList.remove("primary","secondary");
+    if(state.archPrimary===i){ div.classList.add("primary"); badge.textContent="Primary"; }
+    else if(state.archSecondary===i){ div.classList.add("secondary"); badge.textContent="Secondary"; }
+    const cb = div.querySelector(".cbadge");
+    if(compare && (compare.archPrimary===i || compare.archSecondary===i)){
+      cb.style.display="block";
+      cb.textContent = (compare.who||"them")+": "+(compare.archPrimary===i?"primary":"secondary");
+    } else cb.style.display="none";
+  });
+
+  document.getElementById("status").innerHTML =
+    `<b>${setCount}/${total}</b> sliders set · archetype ${state.archPrimary!==null?"<b>"+ARCHETYPES[state.archPrimary].n+"</b>":"<b>not chosen</b>"} · saves automatically in this browser`;
+  renderSummary();
+  persist();
+}
+
+function setProg(key, done, total){
+  const el = document.querySelector(`[data-prog="${key}"]`);
+  if(!el) return;
+  el.textContent = `${done}/${total}`;
+  el.className = "prog"+(done===total && total>0 ? " done":"");
+}
+
+function renderSummary(){
+  const strong=[], mild=[]; let undecidedCount=0;
+  SECTIONS.filter(s=>s.type==="sliders").forEach(sec=>{
+    state.sliders[sec.key].forEach((v,i)=>{
+      const p = sec.pairs[i];
+      if(v===null){ undecidedCount++; return; }
+      const s = Math.abs(v-50), lean = v<50?p.l:p.r;
+      if(s>=20) strong.push(lean); else if(s>=5) mild.push(lean); else undecidedCount++;
+    });
+  });
+  let html = "";
+  const bn = state.brand || "The brand";
+  if(state.archPrimary!==null){
+    html += `<p><b>Archetype:</b> ${ARCHETYPES[state.archPrimary].n}`+
+      (state.archSecondary!==null?` with a ${ARCHETYPES[state.archSecondary].n} streak`:"")+`</p>`;
+  }
+  if(state.texts.promise) html += `<p><b>Promise:</b> ${state.texts.promise}</p>`;
+  if(strong.length) html += `<p><b>${bn} is:</b> ${strong.join(", ")}</p>`;
+  if(mild.length)   html += `<p><b>Leaning:</b> ${mild.join(", ")}</p>`;
+  if(undecidedCount) html += `<p class="note"><b>${undecidedCount}</b> dimension${undecidedCount>1?"s":""} still undecided.</p>`;
+  if(!html) html = `<p class="note">Fill in the sections to build the profile.</p>`;
+  document.getElementById("summaryText").innerHTML = html;
+}
+
+/* ================= PERSISTENCE ================= */
+function persist(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+function restore(){
+  try{
+    const d = JSON.parse(localStorage.getItem(KEY));
+    if(d){
+      state.brand = d.brand||""; state.who = d.who||"";
+      state.texts = Object.assign(state.texts, d.texts||{});
+      state.archPrimary = d.archPrimary??null; state.archSecondary = d.archSecondary??null;
+      SECTIONS.filter(s=>s.type==="sliders").forEach(sec=>{
+        if(d.sliders && Array.isArray(d.sliders[sec.key])){
+          sec.pairs.forEach((_,i)=>{
+            const v = d.sliders[sec.key][i];
+            state.sliders[sec.key][i] = (v===null||v===undefined)?null:+v;
+          });
+        }
+      });
+    }
+  }catch(e){}
+  document.getElementById("brand").value = state.brand;
+  document.getElementById("who").value = state.who;
+  document.querySelectorAll("textarea[data-t]").forEach(t=>{ t.value = state.texts[t.dataset.t]||""; });
+}
+
+/* ================= EVENTS ================= */
+document.body.addEventListener("input", e=>{
+  const t = e.target;
+  if(t.type==="range"){ state.sliders[t.dataset.sec][+t.dataset.i] = +t.value; render(); return; }
+  if(t.dataset && t.dataset.t){ state.texts[t.dataset.t] = t.value; render(); return; }
+  if(t.id==="brand"){ state.brand = t.value; persist(); }
+  if(t.id==="who"){ state.who = t.value; persist(); }
+});
+
+document.getElementById("archGrid").addEventListener("click", e=>{
+  const card = e.target.closest(".arch"); if(!card) return;
+  const i = +card.dataset.a;
+  if(state.archPrimary===i){ state.archPrimary=null; state.archSecondary=i; }
+  else if(state.archSecondary===i){ state.archSecondary=null; }
+  else { state.archPrimary=i; }
+  render();
+});
+
+document.getElementById("exportBtn").onclick = ()=>{
+  const data = Object.assign({tool:"brand-identity-canvas-full", date:new Date().toISOString().slice(0,10)}, state);
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  const slug = (state.brand||"brand")+"-"+(state.who||"unnamed");
+  a.download = `identity-${slug.toLowerCase().replace(/\s+/g,"-")}.json`;
+  a.click();
+};
+
+document.getElementById("importBtn").onclick = ()=> document.getElementById("fileInput").click();
+document.getElementById("fileInput").onchange = e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    try{
+      const d = JSON.parse(r.result);
+      if(!d.sliders) throw 0;
+      compare = d;
+      const tag = document.getElementById("compareTag");
+      tag.style.display="block";
+      tag.textContent = `Comparing against: ${d.who||"unnamed"} (${d.date||"no date"}) — teal dots on sliders, notes on archetype cards. Warnings where you differ by 25+.`;
+      render();
+    }catch(err){ alert("Not a valid export file from this tool."); }
+  };
+  r.readAsText(f);
+};
+
+document.getElementById("copyBtn").onclick = ()=>{
+  const lines = [`Brand identity canvas — ${state.brand||"unnamed brand"} — ${state.who||"unnamed"} — ${new Date().toISOString().slice(0,10)}`];
+  TIERS.forEach(tier=>{
+    lines.push("", "=== "+tier.title.toUpperCase()+" ===");
+    SECTIONS.filter(s=>s.tier===tier.key).forEach(sec=>{
+      lines.push("", sec.num+" · "+sec.title.toUpperCase());
+      if(sec.type==="text"){
+        sec.fields.forEach(f=> lines.push(`  ${f.label}: ${(state.texts[f.k]||"—")}`));
+      }
+      if(sec.type==="sliders"){
+        state.sliders[sec.key].forEach((v,i)=>{
+          const p = sec.pairs[i];
+          lines.push(`  ${p.l} ↔ ${p.r}: ${v===null?"not set":v+"/100 ("+describe(sec.key,i,v)+")"}`);
+        });
+      }
+      if(sec.type==="archetype"){
+        lines.push(`  Primary: ${state.archPrimary!==null?ARCHETYPES[state.archPrimary].n:"—"}`);
+        lines.push(`  Secondary: ${state.archSecondary!==null?ARCHETYPES[state.archSecondary].n:"—"}`);
+      }
+    });
+  });
+  navigator.clipboard.writeText(lines.join("\n")).then(()=>{
+    const btn = document.getElementById("copyBtn");
+    btn.textContent = "Copied ✓"; setTimeout(()=>btn.textContent="Copy summary", 1500);
+  });
+};
+
+document.getElementById("resetBtn").onclick = ()=>{
+  if(!confirm("Clear everything?")) return;
+  const brand = state.brand, who = state.who;
+  state = blankState(); state.brand = brand; state.who = who;
+  compare = null;
+  document.getElementById("compareTag").style.display="none";
+  document.querySelectorAll("input[type=range]").forEach(inp=>inp.value=50);
+  document.querySelectorAll("textarea[data-t]").forEach(t=>t.value="");
+  render();
+};
+
+restore();
+render();
+</script>
+</body>
+</html>
